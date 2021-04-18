@@ -83,22 +83,18 @@ class Sandbox
         PVector dir = new PVector(mouseX, mouseY);
         PVector p = o.p;
         
-        float d = dist(dir.x, dir.y, p.x, p.y);
-        float maxDist = dist(0, 0, width, height);
-        float gray = map(d, 0, maxDist, 0, 255);
+        float intensity = map(p.dist(dir), //distance of cursor and object
+                              0, 
+                              dist(0, 0, width, height), //max distance
+                              0, 255);
      
         strokeWeight(5);    
-        stroke(gray,255-gray,0);
+        stroke(intensity,255-intensity,0);
         parent.line(o.p.x, o.p.y, dir.x, dir.y );  
        
-        //vector from object to pointer
-        dir = dir.sub(p);
-        //f=kx
-        //ma=kx  : m=1
-        //a=kx;
-        
-        dir.mult(k);
-       
+        //vector from object to mouse cursor
+        dir = dir.sub(p);       
+        dir.mult(k);       
         dir = dir.add(gravity);
        
         o.setAcceleration(dir);
@@ -107,7 +103,7 @@ class Sandbox
     
     void drawObject(PhysObject o)
     {
-        /*ship heading is same as accleration vector
+        /*ship heading is same as acceleration vector */
         Ship ship = new Ship(o.p, o.a.heading());
         strokeWeight(2); 
         ship.setCanvas(parent);
